@@ -1,0 +1,19 @@
+{
+	"name": "undefinedoffset/silverstripe-markdown",
+	"description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "markdown"],
+	"authors": [
+		{
+			"name": "Ed Chipman",
+			"homepage": "http://www.edchipman.ca",
+			"role": "Developer"
+		}
+	],
+
+	"require":
+	{
+		"silverstripe/framework": "3.*",
+		"composer/installers": "*"
+	}
+}

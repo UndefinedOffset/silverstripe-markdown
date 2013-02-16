@@ -1,6 +1,6 @@
 (function($) {
     $.entwine('ss', function($) {
-        $('textarea.gfmmarkdowneditor').entwine({
+        $('textarea.markdowneditor').entwine({
             onkeydown: function(e) {
                 if(e.keyCode===9) { // tab was pressed
                     var domElm=$(this).get(0);

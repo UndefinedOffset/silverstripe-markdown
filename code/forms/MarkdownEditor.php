@@ -10,6 +10,13 @@ class MarkdownEditor extends TextareaField {
         $this->extraClasses['stacked']='stacked';
         
         
+        
+        Requirements::css(MARKDOWN_MODULE_BASE.'/css/MarkdownEditor.css');
+        
+        Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/ace.js');
+        Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/mode-markdown.js');
+        Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/theme-textmate.js');
+        Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/theme-twilight.js');
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/MarkdownEditor.js');
         return parent::FieldHolder($properties);
     }

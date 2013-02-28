@@ -12,22 +12,22 @@
                                 width: '100%',
                                 height: $(this).height()
                             });
-                
+
                 $(this).setTextArea($(this));
                 $(this).hide();
-                
+
                 var div=$('<div id="'+$(this).attr('ID')+'_Editor" class="markdowneditor_editor"/>').css('height', $(this).getFrame().height).css('width', $(this).getFrame().width).text($(this).val());
                 div.insertAfter($(this));
                 $(this).setDiv(div);
-                
+
                 var editor=ace.edit(div.get(0));
                 editor.getSession().setMode('ace/mode/markdown');
                 editor.setShowPrintMargin(false);
-                editor.setTheme('ace/theme/twilight');
+                editor.setTheme($Theme);
                 editor.resize();
                 div.removeClass('ace_dark');
                 $(this).setEditor(editor);
-                
+
                 var code=$(this).val();
                 $(this).setUseSoftTabs($(this).usesSoftTabs(code));
                 $(this).setTabSize($(this).getSoftTabs() ? $(this).guessTabSize(code):8);

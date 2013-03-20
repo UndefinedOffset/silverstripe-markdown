@@ -15,5 +15,11 @@
 	{
 		"silverstripe/framework": "3.*",
 		"composer/installers": "*"
+	},
+	"support": {
+		"issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
+	},
+	"extra": {
+		"installer-name": "Markdown"
 	}
 }

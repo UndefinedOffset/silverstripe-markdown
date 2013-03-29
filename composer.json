@@ -20,6 +20,6 @@
 		"issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
 	},
 	"extra": {
-		"installer-name": "Markdown"
+		"installer-name": "markdown"
 	}
 }

@@ -56,7 +56,7 @@ class Markdown extends Text {
         $curl=curl_init('https://api.github.com/markdown');
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-type: application/json", "User-Agent: curl"));
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);

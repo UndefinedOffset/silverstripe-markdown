@@ -9,6 +9,10 @@ class Markdown extends Text {
     protected static $useGFM=false;
     protected $parsedHTML=false;
     public static $escape_type='xml';
+
+    protected static $useBasicAuth = false;
+    protected static $username = "";
+    protected static $password = "";
     
     
     /**
@@ -50,13 +54,21 @@ class Markdown extends Text {
         $sendObj->text=$this->value;
         $sendObj->mode=($useGFM ? 'gmf':'markdown');
         $content=json_encode($sendObj);
-        
+
+        //Build headers
+        $headers = array("Content-type: application/json", "User-Agent: curl");
+        if (self::$useBasicAuth) {
+            $username = self::$username;
+            $password = self::$password;
+            $encoded = base64_encode("$username:$password");
+            $headers[] = "Authorization: Basic $encoded";
+        }        
         
         //Build curl request to github's api
         $curl=curl_init('https://api.github.com/markdown');
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-type: application/json", "User-Agent: curl"));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -110,6 +122,30 @@ class Markdown extends Text {
      */
     public static function getUseGFM() {
         return self::$useGFM;
+    }
+
+    /**
+     * Sets whether or not to include the Authorization header in GitHub API requests
+     * @param {bool} $use Boolean true to enable false otherwise
+     */
+    public static function useBasicAuth($use = true) {
+        self::$useBasicAuth = $use;
+    }
+
+    /**
+     * Sets the GitHub username for Basic Auth
+     * @param {string} $username Your GitHub username
+     */
+    public static function setGithubUsername($username) {
+        self::$username = $username;
+    }
+
+    /**
+     * Sets the GitHub password for Basic Auth
+     * @param {string} $password Your GitHub password
+     */
+    public static function setGithubPassword($password) {
+        self::$password = $password;
     }
 }
 ?>

@@ -1,14 +1,19 @@
 <?php
 class Markdown extends Text {
     public static $casting=array(
-        'AsHTML'=>'HTMLText',
-        'Markdown'=>'Text'
-    );
+                                'AsHTML'=>'HTMLText',
+                                'Markdown'=>'Text'
+                            );
+    
+    
+    public static $escape_type='xml';
+    
+    private static $renderer='GithubMarkdownRenderer';
+    
+    private $renderInst;
     
     protected $parsedHTML=false;
-    public static $escape_type='xml';
-
-    private static $renderer = null;
+    
     
     /**
      * Checks cache to see if the contents of this field have already been loaded from github, if they haven't then a request is made to the github api to render the markdown
@@ -16,20 +21,22 @@ class Markdown extends Text {
      * @return {string} Markdown rendered as HTML
      */
     public function AsHTML($useGFM=false) {
-        
         if($this->parsedHTML!==false) {
             return $this->parsedHTML;
         }
-
+        
         //Setup renderer
-        $renderer = $this->getRenderer();
-        $supported = $renderer->isSupported();
-        if ($supported !== true) {
-            $class_name = get_class($renderer);
+        $renderer=$this->getRenderer();
+        $supported=$renderer->isSupported();
+        if($supported!==true) {
+            $class_name=get_class($renderer);
             user_error("Renderer $class_name is not supported on this system: $supported");
         }
-        if ($renderer instanceof GithubMarkdownRenderer) {
-            $renderer->setUseGFM($useGFM);
+        
+        if($renderer instanceof GithubMarkdownRenderer) {
+            $beforeUseGFM=GithubMarkdownRenderer::getUseGFM();
+            
+            GithubMarkdownRenderer::setUseGFM($useGFM);
         }
         
         //Init cache stuff
@@ -49,18 +56,22 @@ class Markdown extends Text {
         }
         
         //Get rendered HTML
-        $response = $renderer->getRenderedHTML($this->value);
+        $response=$renderer->getRenderedHTML($this->value);
         
         //Store response in memory
         $this->parsedHTML=$response;
         
         //Cache response to file system
         $cache->save($this->parsedHTML, $cacheKey);
+        
+        //Reset GFM
+        if($renderer instanceof GithubMarkdownRenderer) {
+            GithubMarkdownRenderer::setUseGFM($beforeUseGFM);
+        }
                 
         //Return response
         return $this->parsedHTML;
     }
-    
     
     /**
      * Renders the field used in the template
@@ -74,18 +85,27 @@ class Markdown extends Text {
 
     /**
      * Sets the renderer for markdown fields to use
-     * 
-     * @param IMarkdownRenderer An implementation of IMarkdownRenderer
+     * @param {string} $renderer Class Name of an implementation of IMarkdownRenderer
      */
-    public static function setRenderer(IMarkdownRenderer $renderer) {
-        self::$renderer = $renderer;
-    }
-
-    private function getRenderer() {
-        if (!self::$renderer) {
-            self::$renderer = new GithubMarkdownRenderer();
+    public static function setRenderer($renderer) {
+        if(ClassInfo::classImplements($renderer, 'IMarkdownRenderer')) {
+            self::$renderer=$renderer;
+        }else {
+            user_error('The renderer '.$renderer.' does not implement IMarkdownRenderer', E_USER_ERROR);
         }
-        return self::$renderer;
+    }
+    
+    /**
+     * Gets the active mardown renderer
+     * @return {IMarkdownRenderer} An implementation of IMarkdownRenderer
+     */
+    private function getRenderer() {
+        if(!is_object($this->renderInst)) {
+            $class=self::$renderer;
+            $this->renderInst=new $class();
+        }
+        
+        return $this->renderInst;
     }
 }
 ?>

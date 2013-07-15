@@ -10,7 +10,6 @@ class MarkdownEditor extends TextareaField {
         $this->extraClasses['stacked']='stacked';
         
         
-        
         Requirements::css(MARKDOWN_MODULE_BASE.'/css/MarkdownEditor.css');
         
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/ace.js');
@@ -27,11 +26,11 @@ class MarkdownEditor extends TextareaField {
      */
     public function getAttributes() {
         return array_merge(
-                parent::getAttributes(),
-                array(
-                    'style'=>'width: 97%; max-width: 100%; height: '.($this->rows * 16).'px; resize: none;', // prevents horizontal scrollbars
-                )
-        );
+                            parent::getAttributes(),
+                            array(
+                                'style'=>'width: 97%; max-width: 100%; height: '.($this->rows * 16).'px; resize: none;', // prevents horizontal scrollbars
+                            )
+                        );
     }
 }
 ?>

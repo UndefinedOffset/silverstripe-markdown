@@ -1,39 +1,42 @@
 <?php
-
 class GithubMarkdownRenderer implements IMarkdownRenderer {
-
-	protected $useGFM = false;
-	protected $useBasicAuth = false;
-	protected $username = "";
-	protected $password = "";
-
-	public function __construct($useGFM = false) {
-		$this->useGFM = $useGFM;
-	}
-
+	private static $useGFM=false;
+	private static $useBasicAuth=false;
+	private static $username=null;
+	private static $password=null;
+    
+    
+    /**
+     * Detects if curl is supported which is required for this renderer
+     * @return {bool} Detects if curl is supported
+     */
 	public function isSupported() {
-		$supported = function_exists("curl_version");
-		if (!$supported) {
-			$supported = "CURL not found.";
+        $supported=function_exists('curl_version');
+		if(!$supported) {
+			$supported='CURL not found';
 		}
+        
 		return $supported;
 	}
-
+    
+	/**
+	 * Returns the supplied Markdown as rendered HTML
+	 * @param {string} $markdown The markdown to render
+	 * @return {string} The rendered HTML
+	 */
 	public function getRenderedHTML($value) {
    		//Build object to send
         $sendObj=new stdClass();
         $sendObj->text=$value;
-        $sendObj->mode=($this->useGFM ? 'gmf':'markdown');
+        $sendObj->mode=(self::$useGFM ? 'gmf':'markdown');
         $content=json_encode($sendObj);
-
+        
         //Build headers
-        $headers = array("Content-type: application/json", "User-Agent: curl");
-        if ($this->useBasicAuth) {
-            $username = $this->username;
-            $password = $this->password;
-            $encoded = base64_encode("$username:$password");
-            $headers[] = "Authorization: Basic $encoded";
-        }        
+        $headers=array("Content-type: application/json", "User-Agent: curl");
+        if(self::$useBasicAuth) {
+            $encoded=base64_encode(self::$username.':'.self::$password);
+            $headers[]="Authorization: Basic $encoded";
+        }
         
         //Build curl request to github's api
         $curl=curl_init('https://api.github.com/markdown');
@@ -54,49 +57,35 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
         
         //Close curl connection
         curl_close($curl);
-
+        
         return $response;
 	}
-
+    
     /**
      * Globally enable or disable github flavored markdown
      * @param {bool} $val Boolean true to enable false otherwise
-     * @default true
      */
-    public function setUseGFM($value) {
-        $this->useGFM=$value;
+    public static function setUseGFM($value=true) {
+        self::$useGFM=$value;
     }
     
     /**
      * Gets if github flavored markdown is enabled or not globally
      * @return {bool} Returns boolean true if github flavored markdown is enabled false otherwise
      */
-    public function getUseGFM() {
-        return $this->useGFM;
+    public static function getUseGFM() {
+        return self::$useGFM;
     }
-
+    
     /**
-     * Sets whether or not to include the Authorization header in GitHub API requests
-     * @param {bool} $use Boolean true to enable false otherwise
+     * Sets whether or not to include the Authorization header in GitHub API requests, both parameters are required to enable basic auth
+     * @param {string} $username Github Username
+     * @param {string} $password Github Password
      */
-    public function useBasicAuth($use = true) {
-        $this->useBasicAuth = $use;
+    public function useBasicAuth($username=false, $password=false) {
+        self::$useBasicAuth=($username!==false && $password!==false);
+        self::$username=$username;
+        self::$password=$password;
     }
-
-    /**
-     * Sets the GitHub username for Basic Auth
-     * @param {string} $username Your GitHub username
-     */
-    public function setGithubUsername($username) {
-        $this->username = $username;
-    }
-
-    /**
-     * Sets the GitHub password for Basic Auth
-     * @param {string} $password Your GitHub password
-     */
-    public function setGithubPassword($password) {
-        $this->password = $password;
-    }	
-	
 }
+?>

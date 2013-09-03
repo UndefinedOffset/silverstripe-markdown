@@ -3,6 +3,7 @@
 	"description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "markdown"],
+    "license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "Ed Chipman",

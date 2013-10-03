@@ -1,5 +1,5 @@
 {
-	"name": "undefinedoffset/markdown",
+	"name": "undefinedoffset/silverstripe-markdown",
 	"description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "markdown"],
@@ -22,8 +22,5 @@
 	},
 	"extra": {
 		"installer-name": "markdown"
-	},
-	"replace": {
-		"undefinedoffset/silverstripe-markdown": "*"
 	}
 }

@@ -4,8 +4,7 @@
             TextArea: null,
             Div: null,
             Editor: null,
-            Frame: null,
-            WrapMode: false,
+            Frame: null,            
             SoftTabs: true,
             onmatch: function() {
                 $(this).setFrame({
@@ -18,7 +17,7 @@
                 
                 var div=$('<div id="'+$(this).attr('ID')+'_Editor" class="markdowneditor_editor"/>').css('height', $(this).getFrame().height).css('width', $(this).getFrame().width).text($(this).val());
                 div.insertAfter($(this));
-                $(this).setDiv(div);
+                $(this).setDiv(div);                
                 
                 var editor=ace.edit(div.get(0));
                 editor.getSession().setMode('ace/mode/markdown');
@@ -31,7 +30,7 @@
                 var code=$(this).val();
                 $(this).setUseSoftTabs($(this).usesSoftTabs(code));
                 $(this).setTabSize($(this).getSoftTabs() ? $(this).guessTabSize(code):8);
-                $(this).setUseWrapMode($(this).getWrapMode());
+                $(this).setUseWrapMode($(this).attr("wrap-mode") == "true");
                 $(this).setupFormBindings();
                 $(this).setupHacks();
             },

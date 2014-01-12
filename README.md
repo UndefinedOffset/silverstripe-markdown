@@ -26,7 +26,10 @@ class MyPage extends Page {
     public function getCMSFields() {
         $fields=parent::getCMSFields();
         
-        $fields->addFieldToTab("Root.Main", new MarkdownEditor('MarkdownContent', 'Page Content (Markdown)'));
+        $editor = new MarkdownEditor('MarkdownContent', 'Page Content (Markdown)');
+        $editor->setRows(15); //optional, set number of rows in CMS
+        $editor->setWrapMode(true); //optional, turn on word wrapping
+        $fields->addFieldToTab("Root.Main", $editor);
         
         return $fields;
     }

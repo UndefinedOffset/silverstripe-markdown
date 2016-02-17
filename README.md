@@ -68,10 +68,9 @@ GithubMarkdownRenderer::setUseGFM(true); //whether or not to use Github Flavoure
 ```
 
 ####PHPMarkdownMarkdownRenderer
-PHPMarkdownMarkdownRenderer is simple and has no options. Use this to avoid the delay on page load the first time after editing that comes from using the Github renderer (especially if the page has many sections of markdown). You will need to install [PHP Markdown](https://github.com/michelf/php-markdown) for this to work.
+PHPMarkdownMarkdownRenderer is simple and has no options. Use this to avoid the delay on page load the first time after editing that comes from using the Github renderer (especially if the page has many sections of markdown). You will need to install [PHP Markdown](https://github.com/michelf/php-markdown) for this to work - it can be installed with composer.
 
 **Note:** This renderer does not support Github Flavoured Markdown.
 ```php
-$renderer=new PHPMarkdownMarkdownRenderer();
-Markdown::setRenderer($renderer);
+Markdown::setRenderer('PHPMarkdownMarkdownRenderer');
 ```

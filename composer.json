@@ -22,7 +22,7 @@
   "extra": {
     "installer-name": "markdown",
     "branch-alias": {
-      "dev-master": "2.x-dev"
+      "dev-ss4-compat": "2.x-dev"
     }
   },
   "autoload": {

@@ -1,4 +1,7 @@
 <?php
+
+namespace UndefinedOffset\Markdown\Renderer;
+
 class PHPMarkdownMarkdownRenderer implements IMarkdownRenderer {
     /**
 	 * Returns the supplied Markdown as rendered HTML
@@ -12,7 +15,7 @@ class PHPMarkdownMarkdownRenderer implements IMarkdownRenderer {
 		}
 		return $exists;
 	}
-    
+
 	/**
 	 * Returns the supplied Markdown as rendered HTML
 	 * @param {string} $markdown The markdown to render
@@ -22,4 +25,3 @@ class PHPMarkdownMarkdownRenderer implements IMarkdownRenderer {
 		return \Michelf\Markdown::defaultTransform($markdown);
 	}
 }
-?>

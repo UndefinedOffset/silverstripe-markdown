@@ -1,4 +1,10 @@
 <?php
+
+namespace UndefinedOffset\Markdown\Forms;
+
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\View\Requirements;
+
 class MarkdownEditor extends TextareaField {
     protected $rows=30;
 
@@ -12,17 +18,17 @@ class MarkdownEditor extends TextareaField {
         $this->wrap_mode=$mode;
         return $this;
     }
-    
+
     /**
      * Returns the field holder used by templates
      * @return {string} HTML to be used
      */
     public function FieldHolder($properties=array()) {
         $this->extraClasses['stacked']='stacked';
-        
-        
+
+
         Requirements::css(MARKDOWN_MODULE_BASE.'/css/MarkdownEditor.css');
-        
+
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/ace.js');
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/mode-markdown.js');
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/external/ace/theme-textmate.js');
@@ -30,7 +36,7 @@ class MarkdownEditor extends TextareaField {
         Requirements::javascript(MARKDOWN_MODULE_BASE.'/javascript/MarkdownEditor.js');
         return parent::FieldHolder($properties);
     }
-    
+
     /**
      * Generates the attributes to be used on the field
      * @return {array} Array of attributes to be used on the form field
@@ -43,6 +49,5 @@ class MarkdownEditor extends TextareaField {
                                 'wrap-mode'=>($this->wrap_mode) ? "true" : "false"
                             )
                         );
-    }    
+    }
 }
-?>

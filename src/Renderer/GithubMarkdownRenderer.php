@@ -4,33 +4,36 @@ namespace UndefinedOffset\Markdown\Renderer;
 
 use stdClass;
 
-class GithubMarkdownRenderer implements IMarkdownRenderer {
-	private static $useGFM=false;
-	private static $useBasicAuth=false;
-	private static $username=null;
-	private static $password=null;
+class GithubMarkdownRenderer implements IMarkdownRenderer
+{
+    private static $useGFM=false;
+    private static $useBasicAuth=false;
+    private static $username=null;
+    private static $password=null;
 
 
     /**
      * Detects if curl is supported which is required for this renderer
      * @return {bool} Detects if curl is supported
      */
-	public function isSupported() {
+    public function isSupported()
+    {
         $supported=function_exists('curl_version');
-		if(!$supported) {
-			$supported='CURL not found';
-		}
+        if (!$supported) {
+            $supported='CURL not found';
+        }
 
-		return $supported;
-	}
+        return $supported;
+    }
 
-	/**
-	 * Returns the supplied Markdown as rendered HTML
-	 * @param {string} $markdown The markdown to render
-	 * @return {string} The rendered HTML
-	 */
-	public function getRenderedHTML($value) {
-   		//Build object to send
+    /**
+     * Returns the supplied Markdown as rendered HTML
+     * @param {string} $markdown The markdown to render
+     * @return {string} The rendered HTML
+     */
+    public function getRenderedHTML($value)
+    {
+        //Build object to send
         $sendObj=new stdClass();
         $sendObj->text=$value;
         $sendObj->mode=(self::$useGFM ? 'gmf':'markdown');
@@ -38,7 +41,7 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
 
         //Build headers
         $headers=array("Content-type: application/json", "User-Agent: curl");
-        if(self::$useBasicAuth) {
+        if (self::$useBasicAuth) {
             $encoded=base64_encode(self::$username.':'.self::$password);
             $headers[]="Authorization: Basic $encoded";
         }
@@ -56,7 +59,7 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
         //Send request and verify response
         $response=curl_exec($curl);
         $status=curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        if($status!=200) {
+        if ($status!=200) {
             user_error("Error: Call to api.github.com failed with status $status, response $response, curl_error ".curl_error($curl).", curl_errno ".curl_errno($curl), E_USER_WARNING);
         }
 
@@ -64,13 +67,14 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
         curl_close($curl);
 
         return $response;
-	}
+    }
 
     /**
      * Globally enable or disable github flavored markdown
      * @param {bool} $val Boolean true to enable false otherwise
      */
-    public static function setUseGFM($value=true) {
+    public static function setUseGFM($value = true)
+    {
         self::$useGFM=$value;
     }
 
@@ -78,7 +82,8 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
      * Gets if github flavored markdown is enabled or not globally
      * @return {bool} Returns boolean true if github flavored markdown is enabled false otherwise
      */
-    public static function getUseGFM() {
+    public static function getUseGFM()
+    {
         return self::$useGFM;
     }
 
@@ -87,7 +92,8 @@ class GithubMarkdownRenderer implements IMarkdownRenderer {
      * @param {string} $username Github Username
      * @param {string} $password Github Password
      */
-    public function useBasicAuth($username=false, $password=false) {
+    public function useBasicAuth($username = false, $password = false)
+    {
         self::$useBasicAuth=($username!==false && $password!==false);
         self::$username=$username;
         self::$password=$password;

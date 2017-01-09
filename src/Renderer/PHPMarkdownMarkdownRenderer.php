@@ -6,12 +6,12 @@ class PHPMarkdownMarkdownRenderer implements IMarkdownRenderer
 {
     /**
      * Returns the supplied Markdown as rendered HTML
-     * @param {string} $markdown The markdown to render
-     * @return {string} The rendered HTML
+     * @param  string $markdown The markdown to render
+     * @return string The rendered HTML
      */
     public function isSupported()
     {
-        $exists=class_exists("\Michelf\Markdown");
+        $exist s =class_exists("\Michelf\Markdown");
         if (!$exists) {
             return "Unable to find the php-markdown class (\Michelf\Markdown) on the classpath.";
         }
@@ -20,8 +20,8 @@ class PHPMarkdownMarkdownRenderer implements IMarkdownRenderer
 
     /**
      * Returns the supplied Markdown as rendered HTML
-     * @param {string} $markdown The markdown to render
-     * @return {string} The rendered HTML
+     * @param  string $markdown The markdown to render
+     * @return string The rendered HTML
      */
     public function getRenderedHTML($markdown)
     {

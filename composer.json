@@ -1,26 +1,33 @@
 {
-	"name": "undefinedoffset/silverstripe-markdown",
-	"description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
-	"type": "silverstripe-module",
-	"keywords": ["silverstripe", "markdown"],
-	"license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Ed Chipman",
-			"homepage": "http://www.edchipman.ca",
-			"role": "Developer"
-		}
-	],
+  "name": "undefinedoffset/silverstripe-markdown",
+  "description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
+  "type": "silverstripe-module",
+  "keywords": ["silverstripe", "markdown"],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Ed Chipman",
+      "homepage": "http://www.edchipman.ca",
+      "role": "Developer"
+    }
+  ],
 
-	"require":
-	{
-		"silverstripe/framework": "3.*",
-		"composer/installers": "*"
-	},
-	"support": {
-		"issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
-	},
-	"extra": {
-		"installer-name": "markdown"
-	}
+  "require": {
+    "silverstripe/framework": "^4.0@dev",
+    "composer/installers": "*"
+  },
+  "support": {
+    "issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
+  },
+  "extra": {
+    "installer-name": "markdown",
+    "branch-alias": {
+      "dev-master": "2.x-dev"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "UndefinedOffset\\Markdown\\": "src/"
+    }
+  }
 }

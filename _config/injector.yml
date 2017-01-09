@@ -1,0 +1,6 @@
+---
+Name: markdowninjector
+---
+SilverStripe\Core\Injector\Injector:
+  Markdown:
+    class: UndefinedOffset\Markdown\Model\FieldTypes\Markdown

@@ -16,7 +16,7 @@ Adds a field and a data type that allows for Markdown editing, uses a supported 
 ## Usage
 Use the Markdown data type as your fields data type, then use the MarkdownEditor field in the cms for editing.
 
-###Page class:
+### Page class:
 ```php
 class MyPage extends Page {
     public static $db=array(
@@ -37,7 +37,7 @@ class MyPage extends Page {
 ```
 
 
-###Template:
+### Template:
 ```html
 <div class="content">
     $MarkdownContent  <!-- Will show as rendered html -->
@@ -51,7 +51,7 @@ You may also request the markdown using Github Flavored Markdown by calling $You
 </div>
 ```
 
-###Configuration:
+### Configuration:
 The default renderer is the Github renderer. However, other renderers are supported.
 
 To set what renderer to use, in **_config.php** do the following:
@@ -60,14 +60,14 @@ To set what renderer to use, in **_config.php** do the following:
 Markdown::setRenderer('GithubMarkdownRenderer'); //Class name of any implementation of IMarkdownRenderer will work
 ```
 
-####GithubMarkdownRenderer
+#### GithubMarkdownRenderer
 The following options are available on the default GithubMarkdownRenderer:
 ```php
 GithubMarkdownRenderer::useBasicAuth('github username', 'github password'); //authenticate to the Github API to get 5,000 requests per hour instead of 60
 GithubMarkdownRenderer::setUseGFM(true); //whether or not to use Github Flavoured Markdown
 ```
 
-####PHPMarkdownMarkdownRenderer
+#### PHPMarkdownMarkdownRenderer
 PHPMarkdownMarkdownRenderer is simple and has no options. Use this to avoid the delay on page load the first time after editing that comes from using the Github renderer (especially if the page has many sections of markdown). You will need to install [PHP Markdown](https://github.com/michelf/php-markdown) for this to work - it can be installed with composer.
 
 **Note:** This renderer does not support Github Flavoured Markdown.

@@ -1,0 +1,70 @@
+<?php
+
+namespace UndefinedOffset\Markdown\Forms;
+
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\View\Requirements;
+
+/**
+ * Class MarkdownEditor
+ * @package UndefinedOffset\Markdown\Forms
+ */
+class MarkdownEditor extends TextareaField
+{
+    /**
+     * {@inheritDoc}
+     */
+    protected $rows = 30;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $wrap_mode = false;
+
+    /**
+     * Sets the "Wrap Mode" on the ACE editor markdown field.
+     * @param boolean $mode True if word wrap should be enabled, false if not
+     * @return $this
+     */
+    public function setWrapMode($mode = false)
+    {
+        $this->wrap_mode = $mode;
+
+        return $this;
+    }
+
+    /**
+     * Returns the field holder used by templates
+     * @return string HTML to be used
+     */
+    public function FieldHolder($properties = [])
+    {
+        $this->extraClasses['stacked'] = 'stacked';
+
+        Requirements::css('undefinedoffset/silverstripe-markdown: css/MarkdownEditor.css');
+
+        Requirements::javascript('undefinedoffset/silverstripe-markdown: javascript/external/ace/ace.js');
+        Requirements::javascript('undefinedoffset/silverstripe-markdown: javascript/external/ace/mode-markdown.js');
+        Requirements::javascript('undefinedoffset/silverstripe-markdown: javascript/external/ace/theme-textmate.js');
+        Requirements::javascript('undefinedoffset/silverstripe-markdown: javascript/external/ace/theme-twilight.js');
+        Requirements::javascript('undefinedoffset/silverstripe-markdown: javascript/MarkdownEditor.js');
+
+        return parent::FieldHolder($properties);
+    }
+
+    /**
+     * Generates the attributes to be used on the field
+     * @return array Array of attributes to be used on the form field
+     */
+    public function getAttributes()
+    {
+        return array_merge(
+            parent::getAttributes(),
+            [
+                // prevents horizontal scrollbars
+                'style' => 'width: 97%; max-width: 100%; height: ' . ($this->rows * 16) . 'px; resize: none;',
+                'wrap-mode' => ($this->wrap_mode) ? 'true' : 'false',
+            ]
+        );
+    }
+}

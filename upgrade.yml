@@ -1,0 +1,6 @@
+mappings:
+  MarkdownEditor: UndefinedOffset\Markdown\Forms\MarkdownEditor
+  Markdown: UndefinedOffset\Markdown\Model\FieldTypes\Markdown
+  GithubMarkdownRenderer: UndefinedOffset\Markdown\Renderer\GithubMarkdownRenderer
+  IMarkdownRenderer: UndefinedOffset\Markdown\Renderer\IMarkdownRenderer
+  PHPMarkdownMarkdownRenderer: UndefinedOffset\Markdown\Renderer\PHPMarkdownMarkdownRenderer

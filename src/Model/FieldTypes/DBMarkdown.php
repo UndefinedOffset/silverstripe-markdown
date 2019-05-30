@@ -2,33 +2,39 @@
 
 namespace UndefinedOffset\Markdown\Model\FieldTypes;
 
-use SilverStripe\Core\Cache;
+use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\FieldType\DBText;
 use UndefinedOffset\Markdown\Renderer\GithubMarkdownRenderer;
+use UndefinedOffset\Markdown\Renderer\IMarkdownRenderer;
 
-class Markdown extends DBText
+/**
+ * Class Markdown
+ * @package UndefinedOffset\Markdown\Model\FieldTypes
+ */
+class DBMarkdown extends DBText
 {
     /**
      * {@inheritDoc}
      */
-    public static $casting = array(
+    private static $casting = [
         'AsHTML' => 'HTMLText',
-        'Markdown' => 'DBText'
-    );
+        'Markdown' => 'DBText',
+    ];
 
     /**
      * @var string
      */
-    public static $escape_type = 'xml';
+    private static $escape_type = 'xml';
 
     /**
      * @var string
      */
-    private static $renderer = 'UndefinedOffset\\Markdown\\Renderer\\GithubMarkdownRenderer';
+    private static $renderer = GithubMarkdownRenderer::class;
 
     /**
-     * @var \UndefinedOffset\Markdown\Renderer\IMarkdownRenderer
+     * @var IMarkdownRenderer
      */
     private $renderInst;
 
@@ -41,7 +47,7 @@ class Markdown extends DBText
     /**
      * Checks cache to see if the contents of this field have already been loaded from github, if they haven't
      * then a request is made to the github api to render the markdown
-     * @param  bool $useGFM Use Github Flavored Markdown or render using plain markdown defaults to false just like
+     * @param bool $useGFM Use Github Flavored Markdown or render using plain markdown defaults to false just like
      *                      how readme files are rendered on github
      * @return string Markdown rendered as HTML
      */
@@ -66,13 +72,14 @@ class Markdown extends DBText
         }
 
         //Init cache stuff
-        $cacheKey = $this->getCacheKey();
-        $cache = Cache::factory('Markdown');
-        $cachedHTML = $cache->load($cacheKey);
+        /*$cacheKey = $this->getCacheKey();
+        $cache = Injector::inst()->get(CacheInterface::class . '.markdown');
+        $cachedHTML = $cache->load($cacheKey);//*/
 
         //Check cache, if it's good use it instead
-        if ($cachedHTML !== false) {
+        if (isset($cachedHTML) && $cachedHTML !== false) {
             $this->parsedHTML = $cachedHTML;
+
             return $this->parsedHTML;
         }
 
@@ -88,10 +95,12 @@ class Markdown extends DBText
         $this->parsedHTML = $response;
 
         //Cache response to file system
-        $cache->save($this->parsedHTML, $cacheKey);
+        if (isset($cache) && isset($cacheKey)) {
+            $cache->save($this->parsedHTML, $cacheKey);
+        }
 
         //Reset GFM
-        if ($renderer instanceof GithubMarkdownRenderer) {
+        if ($renderer instanceof GithubMarkdownRenderer && isset($beforeUseGFM)) {
             GithubMarkdownRenderer::setUseGFM($beforeUseGFM);
         }
 
@@ -116,7 +125,7 @@ class Markdown extends DBText
      */
     public static function setRenderer($renderer)
     {
-        if (ClassInfo::classImplements($renderer, 'SilverStripe\\Markdown\\Renderer\\IMarkdownRenderer')) {
+        if (ClassInfo::classImplements($renderer, IMarkdownRenderer::class)) {
             self::$renderer = $renderer;
         } else {
             user_error('The renderer ' . $renderer . ' does not implement IMarkdownRenderer', E_USER_ERROR);
@@ -124,7 +133,7 @@ class Markdown extends DBText
     }
 
     /**
-     * Gets the active mardown renderer
+     * Gets the active markdown renderer
      * @return IMarkdownRenderer An implementation of IMarkdownRenderer
      */
     private function getRenderer()

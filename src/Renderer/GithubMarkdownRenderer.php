@@ -2,10 +2,17 @@
 
 namespace UndefinedOffset\Markdown\Renderer;
 
+use SilverStripe\Core\Config\Configurable;
 use stdClass;
 
+/**
+ * Class GithubMarkdownRenderer
+ * @package UndefinedOffset\Markdown\Renderer
+ */
 class GithubMarkdownRenderer implements IMarkdownRenderer
 {
+    use Configurable;
+
     /**
      * @var bool
      */
@@ -20,6 +27,10 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
      * @var string
      */
     private static $username;
+
+    /**
+     * @var
+     */
     private static $password;
 
     /**
@@ -38,7 +49,7 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
 
     /**
      * Returns the supplied Markdown as rendered HTML
-     * @param  string $markdown The markdown to render
+     * @param string $value The markdown to render
      * @return string The rendered HTML
      */
     public function getRenderedHTML($value)
@@ -46,11 +57,11 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
         //Build object to send
         $sendObj = new stdClass();
         $sendObj->text = $value;
-        $sendObj->mode = (self::$useGFM ? 'gmf' : 'markdown');
+        $sendObj->mode = (self::$useGFM ? 'gfm' : 'markdown');
         $content = json_encode($sendObj);
 
         //Build headers
-        $headers = array('Content-type: application/json', 'User-Agent: curl');
+        $headers = ['Content-type: application/json', 'User-Agent: curl'];
         if (self::$useBasicAuth) {
             $encoded = base64_encode(self::$username . ':' . self::$password);
             $headers[] = "Authorization: Basic $encoded";
@@ -65,14 +76,13 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
         curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
-
         //Send request and verify response
         $response = curl_exec($curl);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if ($status != 200) {
             user_error(
                 "Error: Call to api.github.com failed with status $status, response $response, curl_error "
-                    . curl_error($curl) . ", curl_errno " . curl_errno($curl),
+                . curl_error($curl) . ", curl_errno " . curl_errno($curl),
                 E_USER_WARNING
             );
         }
@@ -85,7 +95,7 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
 
     /**
      * Globally enable or disable github flavored markdown
-     * @param bool $val Boolean true to enable false otherwise
+     * @param bool $value Boolean true to enable false otherwise
      */
     public static function setUseGFM($value = true)
     {
@@ -104,8 +114,8 @@ class GithubMarkdownRenderer implements IMarkdownRenderer
     /**
      * Sets whether or not to include the Authorization header in GitHub API requests, both parameters are
      * required to enable basic auth
-     * @param string $username Github Username
-     * @param string $password Github Password
+     * @param bool|string $username Github Username
+     * @param bool|string $password Github Password
      */
     public function useBasicAuth($username = false, $password = false)
     {

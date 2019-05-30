@@ -1,7 +1,7 @@
 {
   "name": "undefinedoffset/silverstripe-markdown",
   "description": "Adds a field and a data type that allows for Markdown editing, uses the github api to render the html",
-  "type": "silverstripe-module",
+  "type": "silverstripe-vendormodule",
   "keywords": ["silverstripe", "markdown"],
   "license": "BSD-3-Clause",
   "authors": [
@@ -13,17 +13,22 @@
   ],
 
   "require": {
-    "silverstripe/framework": "^4.0@dev",
-    "composer/installers": "*"
+    "silverstripe/framework": "^4.0",
+    "michelf/php-markdown": "^1.8",
+    "ext-json": "*",
+    "ext-curl": "*"
   },
   "support": {
     "issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
   },
   "extra": {
-    "installer-name": "markdown",
     "branch-alias": {
       "dev-ss4-compat": "2.x-dev"
-    }
+    },
+    "expose": [
+      "css",
+      "javascript"
+    ]
   },
   "autoload": {
     "psr-4": {

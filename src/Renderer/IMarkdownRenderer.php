@@ -2,6 +2,10 @@
 
 namespace UndefinedOffset\Markdown\Renderer;
 
+/**
+ * Interface IMarkdownRenderer
+ * @package UndefinedOffset\Markdown\Renderer
+ */
 interface IMarkdownRenderer
 {
     /**
@@ -14,7 +18,7 @@ interface IMarkdownRenderer
 
     /**
      * Returns the supplied Markdown as rendered HTML
-     * @param  string $markdown The markdown to render
+     * @param string $markdown The markdown to render
      * @return string The rendered HTML
      */
     public function getRenderedHTML($markdown);

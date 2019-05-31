@@ -1,0 +1,8 @@
+---
+Name: markdown-cache-config
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.dbMarkdownCache:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: 'dbmarkdowncache'

@@ -18,6 +18,10 @@
     "ext-json": "*",
     "ext-curl": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7",
+    "squizlabs/php_codesniffer": "*"
+  },
   "support": {
     "issues": "https://github.com/undefinedoffset/silverstripe-markdown/issues"
   },
@@ -32,7 +36,8 @@
   },
   "autoload": {
     "psr-4": {
-      "UndefinedOffset\\Markdown\\": "src/"
+      "UndefinedOffset\\Markdown\\": "src/",
+      "UndefinedOffset\\Markdown\\Test\\": "tests/"
     }
   }
 }

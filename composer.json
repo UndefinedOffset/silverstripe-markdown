@@ -23,7 +23,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-ss4-compat": "2.x-dev"
+      "dev-mastert": "2.x-dev"
     },
     "expose": [
       "css",

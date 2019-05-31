@@ -16,6 +16,16 @@ use UndefinedOffset\Markdown\Renderer\IMarkdownRenderer;
 class DBMarkdown extends DBText
 {
     /**
+     * @var string
+     */
+    private $cache_key;
+
+    /**
+     * @var int Cache length for field value in seconds
+     */
+    private static $cache_seconds = 86400;
+
+    /**
      * {@inheritDoc}
      */
     private static $casting = [
@@ -72,12 +82,11 @@ class DBMarkdown extends DBText
         }
 
         //Init cache stuff
-        /*$cacheKey = $this->getCacheKey();
-        $cache = Injector::inst()->get(CacheInterface::class . '.markdown');
-        $cachedHTML = $cache->load($cacheKey);//*/
+        $cacheKey = $this->getCacheKey();
+        $cache = Injector::inst()->get(CacheInterface::class . '.dbMarkdownCache');
 
         //Check cache, if it's good use it instead
-        if (isset($cachedHTML) && $cachedHTML !== false) {
+        if ($cachedHTML = $cache->get($cacheKey)) {
             $this->parsedHTML = $cachedHTML;
 
             return $this->parsedHTML;
@@ -95,9 +104,7 @@ class DBMarkdown extends DBText
         $this->parsedHTML = $response;
 
         //Cache response to file system
-        if (isset($cache) && isset($cacheKey)) {
-            $cache->save($this->parsedHTML, $cacheKey);
-        }
+        $cache->set($cacheKey, $this->parsedHTML, $this->config()->get('cache_seconds'));
 
         //Reset GFM
         if ($renderer instanceof GithubMarkdownRenderer && isset($beforeUseGFM)) {
@@ -151,6 +158,25 @@ class DBMarkdown extends DBText
      */
     public function getCacheKey()
     {
-        return md5('Markdown_' . $this->tableName . '_' . $this->name . '_' . $this->value);
+        if (!$this->cache_key) {
+            $this->setCacheKey();
+        }
+
+        return $this->cache_key;
+    }
+
+    /**
+     * @param null $key
+     * @return $this
+     */
+    public function setCacheKey($key = null)
+    {
+        if ($key === null) {
+            $key = md5('Markdown_' . $this->tableName . '_' . $this->name . '_' . $this->value);
+        }
+
+        $this->cache_key = $key;
+
+        return $this;
     }
 }
